@@ -1,5 +1,9 @@
 package com.wangyazhou.todo.dataAccessor;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
 public class TodoItem {
     public static final String TABLE_NAME = "TODO_ITEMS_TABLE";
     public static final String KEY_ID = "ID";
@@ -22,6 +26,8 @@ public class TodoItem {
     private long createDatetime;
     private long updateDatetime;
     private long doneDatetime;
+
+    private Bitmap thumbnailBitmap;
 
     public TodoItem() {
         // empty constructor
@@ -47,8 +53,25 @@ public class TodoItem {
         return thumbnail;
     }
 
+    public Bitmap getThumbnailBitmap(){
+        if(thumbnail == null || thumbnail.length < 0){
+            return null;
+        }
+        if(thumbnailBitmap == null) {
+            try {
+                //cache the decode result
+                thumbnailBitmap = BitmapFactory.decodeByteArray(thumbnail, 0, thumbnail.length);
+            }catch (Exception e){
+                Log.e("Todo", "Decode bitmap for " + description + " failed");
+                return null;
+            }
+        }
+        return thumbnailBitmap;
+    }
+
     public void setThumbnail(byte[] thumbnail) {
         this.thumbnail = thumbnail;
+        this.thumbnailBitmap = null;//clear the cache
     }
 
     public long getCreateDatetime() {

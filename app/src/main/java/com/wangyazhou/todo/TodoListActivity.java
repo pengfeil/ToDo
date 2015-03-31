@@ -1,6 +1,11 @@
 package com.wangyazhou.todo;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,6 +20,7 @@ import com.wangyazhou.todo.adapter.TodoListAdapter;
 import com.wangyazhou.todo.dataAccessor.TodoItem;
 import com.wangyazhou.todo.dataAccessor.TodoItemAccessor;
 import com.wangyazhou.todo.util.DatetimeUtil;
+import com.wangyazhou.todo.util.ImageUtil;
 
 import java.util.Date;
 import java.util.Map;
@@ -77,8 +83,7 @@ public class TodoListActivity extends ActionBarActivity {
                 if(listAdapter.getCount() <= 0){
                     return;
                 }
-                Map<String, Object> map = (Map<String, Object>) listAdapter.getItem(0);
-                TodoItem item = (TodoItem) map.get(TodoListAdapter.MAP_KEY_ITEM);
+                TodoItem item = (TodoItem) listAdapter.getItem(0);
                 item.setDescription("Updated!" + DatetimeUtil.getNowDatetime());
                 item.setIsDone(TodoItem.VALUE_IS_DONE);
                 todoItemAccessor.updateTodoItem(item);
@@ -103,5 +108,19 @@ public class TodoListActivity extends ActionBarActivity {
     protected void onDestroy() {
         todoItemAccessor.close();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ActionHelper.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            TodoItem item = listAdapter.getItem(listAdapter.getActiveItemPosition());
+            item.setThumbnail(ImageUtil.Bitmap2Bytes(imageBitmap));
+            listAdapter.updateItem(listAdapter.getActiveItemPosition(), item);
+        } else if (requestCode == ActionHelper.REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
+            Bitmap thumbnail = data.getParcelableExtra("data");
+            Uri fullPhotoUri = data.getData();
+        }
     }
 }

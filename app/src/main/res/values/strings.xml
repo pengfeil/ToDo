@@ -4,4 +4,10 @@
     <string name="action_view_archive">See Archive</string>
 
     <string name="image_view_content_desc">To do image</string>
+
+    <string name="pick_image_dialog_title">Pick Image</string>
+    <array name="pick_image_dialog_menu">
+        <item>From Camera</item>
+        <item>From Picture Library</item>
+    </array>
 </resources>
