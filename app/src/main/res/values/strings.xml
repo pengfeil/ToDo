@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ToDo</string>
+
+    <string name="action_view_archive">See Archive</string>
+
+    <string name="image_view_content_desc">To do image</string>
+</resources>
