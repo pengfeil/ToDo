@@ -44,9 +44,9 @@ public class TodoListAdapter extends SimpleAdapter {
     private LayoutInflater mInflater;
     private TodoItemAccessor todoItemAccessor;
 
-    public TodoListAdapter(Context context, TodoItemAccessor todoItemAccessor) {
+    public TodoListAdapter(Context context) {
         super(context, data, itemLayoutId, from, to);
-        this.todoItemAccessor = todoItemAccessor;
+        this.todoItemAccessor = new TodoItemAccessor(context);
         this.context = (Activity)context;
     }
 
