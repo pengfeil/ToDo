@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">ToDo</string>
 
-    <string name="action_view_archive">See Archive</string>
+    <string name="activity_title_todo_list_1">ToDo List</string>
+    <string name="activity_title_todo_list_2">ToDo Archives</string>
+
+    <array name="top_bar_menu">
+        <item>See Archives</item>
+    </array>
 
     <string name="image_view_content_desc">To do image</string>
 

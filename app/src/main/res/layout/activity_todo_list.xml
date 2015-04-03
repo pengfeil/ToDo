@@ -1,13 +1,32 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp" tools:context=".TodoListActivity">
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/todo_list_list"
-        android:divider="#ccc"
-        android:dividerHeight="1px" />
-</RelativeLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    tools:context=".TodoListActivity">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <com.wangyazhou.todo.view.TopBar
+            android:id="@+id/todo_list_top_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"></com.wangyazhou.todo.view.TopBar>
+
+        <ListView
+            android:id="@+id/todo_list_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/todo_list_top_bar"
+            android:divider="#ccc"
+            android:dividerHeight="1px" />
+    </RelativeLayout>
+
+    <com.wangyazhou.todo.view.SlideMenu
+        android:id="@+id/todo_list_slide_menu"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"></com.wangyazhou.todo.view.SlideMenu>
+</FrameLayout>

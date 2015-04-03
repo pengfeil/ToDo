@@ -21,6 +21,8 @@ import com.wangyazhou.todo.dataAccessor.TodoItem;
 import com.wangyazhou.todo.dataAccessor.TodoItemAccessor;
 import com.wangyazhou.todo.util.DatetimeUtil;
 import com.wangyazhou.todo.util.ImageUtil;
+import com.wangyazhou.todo.view.SlideMenu;
+import com.wangyazhou.todo.view.TopBar;
 
 import java.util.Date;
 import java.util.Map;
@@ -28,8 +30,10 @@ import java.util.Map;
 /**
  * The main activity to display the to do list
  */
-public class TodoListActivity extends ActionBarActivity {
+public class TodoListActivity extends Activity {
     private ListView todoList = null;
+    private TopBar topbar = null;
+    private SlideMenu slideMenu = null;
 
     private TodoListAdapter listAdapter;
     @Override
@@ -44,6 +48,18 @@ public class TodoListActivity extends ActionBarActivity {
         listAdapter = new TodoListAdapter(this);
         todoList.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
+
+        slideMenu = (SlideMenu) this.findViewById(R.id.todo_list_slide_menu);
+
+        topbar = (TopBar) this.findViewById(R.id.todo_list_top_bar);
+        topbar.setTitleText(R.string.activity_title_todo_list_1);
+        topbar.setLeftButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the slide menu
+                slideMenu.forceSlideOut();
+            }
+        });
     }
 
     @Override
