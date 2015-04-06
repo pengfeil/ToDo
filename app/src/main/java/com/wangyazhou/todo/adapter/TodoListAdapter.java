@@ -2,6 +2,7 @@ package com.wangyazhou.todo.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 
 import com.wangyazhou.todo.ActionHelper;
+import com.wangyazhou.todo.ImagePickerActivity;
 import com.wangyazhou.todo.R;
 import com.wangyazhou.todo.dataAccessor.TodoItem;
 import com.wangyazhou.todo.dataAccessor.TodoItemAccessor;
@@ -116,8 +118,11 @@ public class TodoListAdapter extends SimpleAdapter {
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();
-                activeItemPosition = position;
-                addOrUpdateImage();
+                TodoItem item = getItem(position);
+                if(!item.isEmpty()) {
+                    activeItemPosition = position;
+                    addOrUpdateImage();
+                }
             }
         });
         holder.text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -151,7 +156,8 @@ public class TodoListAdapter extends SimpleAdapter {
     }
 
     public void addOrUpdateImage() {
-        ActionHelper.showPickImageDialog(context);
+        Intent pickImageIntent = new Intent(context, ImagePickerActivity.class);
+        context.startActivityForResult(pickImageIntent, ActionHelper.REQUEST_IMAGE_PICKER);
     }
 
     protected boolean isShowingArchived = false;

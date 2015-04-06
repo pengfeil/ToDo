@@ -1,13 +1,17 @@
 package com.wangyazhou.todo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +23,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.wangyazhou.todo.adapter.TodoListAdapter;
+import com.wangyazhou.todo.dataAccessor.Image;
+import com.wangyazhou.todo.dataAccessor.NativeImageLoader;
 import com.wangyazhou.todo.dataAccessor.TodoItem;
 import com.wangyazhou.todo.dataAccessor.TodoItemAccessor;
 import com.wangyazhou.todo.util.DatetimeUtil;
@@ -26,7 +32,9 @@ import com.wangyazhou.todo.util.ImageUtil;
 import com.wangyazhou.todo.view.SlideMenu;
 import com.wangyazhou.todo.view.TopBar;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +46,7 @@ public class TodoListActivity extends Activity {
     private SlideMenu slideMenu = null;
 
     private TodoListAdapter listAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +54,7 @@ public class TodoListActivity extends Activity {
         initializeWidgets();
     }
 
-    protected void initializeWidgets(){
+    protected void initializeWidgets() {
         todoList = (ListView) this.findViewById(R.id.todo_list_list);
         listAdapter = new TodoListAdapter(this);
         todoList.setAdapter(listAdapter);
@@ -57,7 +66,7 @@ public class TodoListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // It's ugly code here. Need refactor if there will be more menu items.
                 boolean isSelected = view.getTag() != null ? (boolean) view.getTag() : false;
-                if(!isSelected) {
+                if (!isSelected) {
                     if (position == 0) {
                         parent.getChildAt(0).setTag(true);
                         parent.getChildAt(1).setTag(false);
@@ -91,19 +100,48 @@ public class TodoListActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
     }
+
+    private static final int SAVE_OK = 1;
+    private List<Image> list = new ArrayList<>();
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case SAVE_OK:
+                    TodoItem item = (TodoItem) msg.obj;
+                    listAdapter.updateItem(item);
+                    mProgressDialog.dismiss();
+                    break;
+            }
+        }
+
+    };
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ActionHelper.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            TodoItem item = listAdapter.getItem(listAdapter.getActiveItemPosition());
-            item.setThumbnail(ImageUtil.Bitmap2Bytes(imageBitmap));
-            listAdapter.updateItem(item);
-        } else if (requestCode == ActionHelper.REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
-            Bitmap thumbnail = data.getParcelableExtra("data");
-            Uri fullPhotoUri = data.getData();
+        Log.d("Todo", "onActivityResult " + resultCode);
+        if (requestCode == ActionHelper.REQUEST_IMAGE_PICKER && resultCode == RESULT_OK) {
+            final String imagePath = data.getStringExtra(ImagePickerActivity.DATA_KEY);
+            mProgressDialog = ProgressDialog.show(this, null, getResources().getString(R.string.save_image_dialog_loading));
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // Hard code the image thumbnail here :(
+                    Bitmap thumbnail = NativeImageLoader.getInstance().decodeThumbBitmapForFile(imagePath, 120, 120);
+                    TodoItem item = listAdapter.getItem(listAdapter.getActiveItemPosition());
+                    item.setThumbnail(ImageUtil.Bitmap2Bytes(thumbnail));
+                    //TODO:Save big image
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = SAVE_OK;
+                    msg.obj = item;
+                    mHandler.sendMessage(msg);
+                }
+            }).start();
         }
     }
 }

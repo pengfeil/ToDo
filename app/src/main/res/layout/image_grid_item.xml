@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.wangyazhou.todo.view.TodoImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:id="@+id/image_grid_item_image"
+        android:layout_gravity="center"
+        android:src="@android:mipmap/sym_def_app_icon"
+        android:scaleType="center"
+        android:contentDescription="grid_image" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_grid_item_picker"
+            android:layout_gravity="top|right"
+            android:src="@android:drawable/btn_star_big_off"
+            android:layout_margin="10dp" />
+    </LinearLayout>
+</FrameLayout>

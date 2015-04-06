@@ -6,6 +6,9 @@
 
     <string name="activity_menu_left_1">Menu</string>
 
+    <string name="activity_menu_left_2">Cancel</string>
+    <string name="activity_menu_left_3">OK</string>
+
     <array name="top_bar_menu">
         <item>See Undo</item>
         <item>See Archives</item>
@@ -19,4 +22,6 @@
         <item>From Camera</item>
         <item>From Picture Library</item>
     </array>
+    <string name="pick_image_dialog_loading">Loading Images...</string>
+    <string name="save_image_dialog_loading">Saving Images...</string>
 </resources>

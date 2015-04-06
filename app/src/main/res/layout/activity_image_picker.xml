@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.wangyazhou.todo.view.TopBar
+        android:id="@+id/image_picker_top_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"></com.wangyazhou.todo.view.TopBar>
+
+    <GridView
+        android:id="@+id/image_picker_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/image_picker_top_bar"
+        android:cacheColorHint="@android:color/transparent"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:numColumns="3"
+        android:listSelector="@android:color/transparent" />
+</LinearLayout>

@@ -56,5 +56,17 @@ public class TopBar extends LinearLayout{
     public void setLeftButtonOnClickListener(OnClickListener listener){
         leftButton.setOnClickListener(listener);
     }
+
+    public void setRightButtonOnClickListener(OnClickListener listener){
+        rightButton.setOnClickListener(listener);
+    }
+
+    public void setEnableLeftButton(boolean enable){
+        leftButton.setEnabled(enable);
+    }
+
+    public void setEnableRightButton(boolean enable){
+        rightButton.setEnabled(enable);
+    }
 }
 
