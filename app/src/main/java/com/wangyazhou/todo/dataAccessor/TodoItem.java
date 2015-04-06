@@ -33,6 +33,10 @@ public class TodoItem {
         // empty constructor
     }
 
+    public boolean isEmpty(){
+        return description == null || description.length() <= 0;
+    }
+
     public int getIsDone() {
         return isDone;
     }

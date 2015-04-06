@@ -37,7 +37,7 @@ public class TodoItemAccessor {
         long archiveThreshold = new Date().getTime() - DatetimeUtil.TWO_DAY_MILLI_SEC;
         String whereClause = TodoItem.KEY_ID + ">? AND (" + ( isArchived
                 // items have been done before two days
-                ? TodoItem.KEY_IS_DONE + "=? AND " + TodoItem.KEY_DONE_DATETIME + "<?"
+                ? TodoItem.KEY_IS_DONE + "=? AND " + TodoItem.KEY_DONE_DATETIME + "<?)"
                 // items have not been done or been done in nearest two days
                 : TodoItem.KEY_IS_DONE + "=? OR " + TodoItem.KEY_DONE_DATETIME + ">=?)" );
         String[] whereArgs = isArchived

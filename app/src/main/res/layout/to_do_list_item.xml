@@ -20,7 +20,9 @@
         android:autoText="false"
         android:background="@null"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:enabled="true"
+        android:focusable="true" />
 
     <ImageView
         android:layout_width="60dp"

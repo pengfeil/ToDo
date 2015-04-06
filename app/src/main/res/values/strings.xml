@@ -4,11 +4,15 @@
     <string name="activity_title_todo_list_1">ToDo List</string>
     <string name="activity_title_todo_list_2">ToDo Archives</string>
 
+    <string name="activity_menu_left_1">Menu</string>
+
     <array name="top_bar_menu">
+        <item>See Undo</item>
         <item>See Archives</item>
     </array>
 
     <string name="image_view_content_desc">To do image</string>
+    <string name="new_task_hint">Tap here to add</string>
 
     <string name="pick_image_dialog_title">Pick Image</string>
     <array name="pick_image_dialog_menu">

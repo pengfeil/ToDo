@@ -16,7 +16,7 @@ public class TopBar extends LinearLayout{
     protected LayoutInflater inflater;
     protected static final int LAYOUT_ID = R.layout.top_bar;
 
-    protected Button leftButton;
+    protected Button leftButton, rightButton;
     protected TextView titleTextView;
     public TopBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,7 +28,21 @@ public class TopBar extends LinearLayout{
         View view = inflater.inflate(LAYOUT_ID, null);
         this.addView(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         leftButton = (Button) this.findViewById(R.id.top_bar_leftBtn);
+        rightButton = (Button) this.findViewById(R.id.top_bar_rightBtn);
         titleTextView = (TextView) this.findViewById(R.id.top_bar_title);
+    }
+    public void setButtonsDisplay(boolean showLeft, boolean showRight, CharSequence leftText, CharSequence rightText){
+        setButtonDisplay(leftButton, showLeft, leftText);
+        setButtonDisplay(rightButton, showRight, rightText);
+    }
+
+    private void setButtonDisplay(Button button, boolean show, CharSequence text){
+        if(show){
+            button.setVisibility(View.VISIBLE);
+            button.setText(text);
+        } else {
+            button.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void setTitleText(CharSequence text){

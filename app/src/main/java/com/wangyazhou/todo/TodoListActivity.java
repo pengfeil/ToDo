@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -50,9 +52,33 @@ public class TodoListActivity extends Activity {
         listAdapter.notifyDataSetChanged();
 
         slideMenu = (SlideMenu) this.findViewById(R.id.todo_list_slide_menu);
+        slideMenu.setMenuOnItemClick(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // It's ugly code here. Need refactor if there will be more menu items.
+                boolean isSelected = view.getTag() != null ? (boolean) view.getTag() : false;
+                if(!isSelected) {
+                    if (position == 0) {
+                        parent.getChildAt(0).setTag(true);
+                        parent.getChildAt(1).setTag(false);
+                        parent.getChildAt(0).setBackgroundColor(view.getResources().getColor(android.R.color.darker_gray));
+                        parent.getChildAt(1).setBackgroundColor(view.getResources().getColor(android.R.color.white));
+                        listAdapter.setIsShowingArchived(false);
+                    } else {
+                        parent.getChildAt(0).setTag(false);
+                        parent.getChildAt(1).setTag(true);
+                        parent.getChildAt(0).setBackgroundColor(view.getResources().getColor(android.R.color.white));
+                        parent.getChildAt(1).setBackgroundColor(view.getResources().getColor(android.R.color.darker_gray));
+                        listAdapter.setIsShowingArchived(true);
+                    }
+                }
+                slideMenu.forceSlideIn();
+            }
+        });
 
         topbar = (TopBar) this.findViewById(R.id.todo_list_top_bar);
         topbar.setTitleText(R.string.activity_title_todo_list_1);
+        topbar.setButtonsDisplay(true, false, getResources().getText(R.string.activity_menu_left_1), null);
         topbar.setLeftButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +100,7 @@ public class TodoListActivity extends Activity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             TodoItem item = listAdapter.getItem(listAdapter.getActiveItemPosition());
             item.setThumbnail(ImageUtil.Bitmap2Bytes(imageBitmap));
-            listAdapter.updateItem(listAdapter.getActiveItemPosition(), item);
+            listAdapter.updateItem(item);
         } else if (requestCode == ActionHelper.REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
             Bitmap thumbnail = data.getParcelableExtra("data");
             Uri fullPhotoUri = data.getData();

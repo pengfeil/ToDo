@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -17,6 +20,8 @@ import com.wangyazhou.todo.R;
 
 public class SlideMenu extends LinearLayout {
     protected Context context;
+    protected LayoutInflater inflater;
+    protected static final int LAYOUT_ID = R.layout.slide_menu_content;
 
     protected LinearLayout transparentFrame;
     protected LinearLayout menuContentFrame;
@@ -49,6 +54,7 @@ public class SlideMenu extends LinearLayout {
     public SlideMenu(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        inflater = LayoutInflater.from(context);
         init();
     }
 
@@ -67,18 +73,17 @@ public class SlideMenu extends LinearLayout {
                 LayoutParams.MATCH_PARENT));
 
         menuContentFrame = new LinearLayout(context);
-        menuContentFrame.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
         LayoutParams params = new LayoutParams(MENU_WIDTH, LayoutParams.MATCH_PARENT);
         params.setMargins(-MENU_WIDTH, 0, 0, 0);
         menuContentFrame.setLayoutParams(params);
 
-        menuList = new ListView(context);
-        menuList.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT));
+        View view = inflater.inflate(LAYOUT_ID, null);
+
+        menuList = (ListView) view.findViewById(R.id.slide_menu_list);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.top_bar_menu));
         menuList.setAdapter(adapter);
-        menuContentFrame.addView(menuList);
+        menuContentFrame.addView(view);
 
         this.addView(menuContentFrame);
         this.addView(transparentFrame);
@@ -112,6 +117,10 @@ public class SlideMenu extends LinearLayout {
         toggleTransparentFrame(enableSliding);
     }
 
+    public void setMenuOnItemClick(AdapterView.OnItemClickListener onItemClickListener){
+        menuList.setOnItemClickListener(onItemClickListener);
+    }
+
     protected boolean validateNextScroll(MotionEvent ev) {
         int scrollX = getScrollX();
         float deltaX = currentSlideX - ev.getX();
@@ -132,6 +141,7 @@ public class SlideMenu extends LinearLayout {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         final int action = ev.getAction();
         if ((action == MotionEvent.ACTION_MOVE) && (mTouchState != TOUCH_STATE_IDLE)) {
+            Log.d(this.getClass().getName(), "onInterceptTouchEvent:Cache start move");
             return true;
         }
 
