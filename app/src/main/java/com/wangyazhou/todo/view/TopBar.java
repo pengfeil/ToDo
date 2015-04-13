@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.wangyazhou.todo.R;
 
-import java.util.zip.Inflater;
-
 public class TopBar extends LinearLayout{
     protected LayoutInflater inflater;
     protected static final int LAYOUT_ID = R.layout.top_bar;

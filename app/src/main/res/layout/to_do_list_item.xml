@@ -10,18 +10,20 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1" />
 
-    <EditText
+    <com.wangyazhou.todo.view.UnderlineEditText
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_weight="10"
         android:id="@+id/todo_list_item_editText"
         android:layout_gravity="center_vertical"
-        android:layout_weight="10"
         android:inputType="textMultiLine"
-        android:autoText="false"
         android:background="@null"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:enabled="true"
+        android:textCursorDrawable="@android:color/holo_blue_dark"
         android:focusable="true" />
 
     <ImageView
@@ -36,6 +38,5 @@
         android:drawingCacheQuality="high"
         android:scaleType="fitXY"
         android:layout_weight="1"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp" />
+        android:layout_margin="3dp" />
 </LinearLayout>

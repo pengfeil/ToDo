@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
     tools:context=".TodoListActivity">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="#ffffff" >
 
         <com.wangyazhou.todo.view.TopBar
             android:id="@+id/todo_list_top_bar"
@@ -21,6 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/todo_list_top_bar"
             android:divider="#ccc"
+            android:cacheColorHint="#00000000"
+            android:background="@android:color/white"
             android:dividerHeight="1px" />
     </RelativeLayout>
 

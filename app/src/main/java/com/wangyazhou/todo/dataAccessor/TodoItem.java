@@ -1,8 +1,9 @@
 package com.wangyazhou.todo.dataAccessor;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import com.wangyazhou.todo.util.ImageUtil;
 
 public class TodoItem {
     public static final String TABLE_NAME = "TODO_ITEMS_TABLE";
@@ -22,7 +23,7 @@ public class TodoItem {
     private int isDone;
     private String description;
     private byte[] thumbnail;
-    private byte[] fullImage;
+    private String fullImage;
     private long createDatetime;
     private long updateDatetime;
     private long doneDatetime;
@@ -30,103 +31,101 @@ public class TodoItem {
     private Bitmap thumbnailBitmap;
 
     public TodoItem() {
-        // empty constructor
+	// empty constructor
     }
 
-    public boolean isEmpty(){
-        return description == null || description.length() <= 0;
+    public boolean isEmpty() {
+	return description == null || description.length() <= 0;
     }
 
     public int getIsDone() {
-        return isDone;
+	return isDone;
     }
 
     public void setIsDone(int isDone) {
-        this.isDone = isDone;
+	this.isDone = isDone;
     }
 
     public String getDescription() {
-        return description;
+	return description;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+	this.description = description;
     }
 
     public byte[] getThumbnail() {
-        return thumbnail;
+	return thumbnail;
     }
 
-    public Bitmap getThumbnailBitmap(){
-        if(thumbnail == null || thumbnail.length < 0){
-            return null;
-        }
-        if(thumbnailBitmap == null) {
-            try {
-                //cache the decode result
-                thumbnailBitmap = BitmapFactory.decodeByteArray(thumbnail, 0, thumbnail.length);
-            }catch (Exception e){
-                Log.e("Todo", "Decode bitmap for " + description + " failed");
-                return null;
-            }
-        }
-        return thumbnailBitmap;
+    public Bitmap getThumbnailBitmap() {
+	if (thumbnail == null || thumbnail.length < 0) {
+	    return null;
+	}
+	if (thumbnailBitmap == null) {
+	    try {
+		// cache the decode result
+		thumbnailBitmap = ImageUtil.bytes2Bitmap(thumbnail);
+	    } catch (Exception e) {
+		Log.e("Todo", "Decode bitmap for " + description + " failed");
+		return null;
+	    }
+	}
+	return thumbnailBitmap;
     }
 
     public void setThumbnail(byte[] thumbnail) {
-        this.thumbnail = thumbnail;
-        this.thumbnailBitmap = null;//clear the cache
+	this.thumbnail = thumbnail;
+	this.thumbnailBitmap = null;// clear the cache
     }
 
     public long getCreateDatetime() {
-        return createDatetime;
+	return createDatetime;
     }
 
     public void setCreateDatetime(long createDatetime) {
-        this.createDatetime = createDatetime;
+	this.createDatetime = createDatetime;
     }
 
     public long getUpdateDatetime() {
-        return updateDatetime;
+	return updateDatetime;
     }
 
     public void setUpdateDatetime(long updateDatetime) {
-        this.updateDatetime = updateDatetime;
+	this.updateDatetime = updateDatetime;
     }
 
     public long getDoneDatetime() {
-        return doneDatetime;
+	return doneDatetime;
     }
 
     public void setDoneDatetime(long doneDatetime) {
-        this.doneDatetime = doneDatetime;
+	this.doneDatetime = doneDatetime;
     }
 
-    public byte[] getFullImage() {
-        return fullImage;
+    public String getFullImage() {
+	return fullImage;
     }
 
-    public void setFullImage(byte[] fullImage) {
-        this.fullImage = fullImage;
+    public void setFullImage(String fullImage) {
+	this.fullImage = fullImage;
     }
 
     public long getId() {
-        return id;
+	return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+	this.id = id;
     }
 
     @Override
     public String toString() {
-        return "TodoItem{" +
-                "id=" + id +
-                ", isDone=" + isDone +
-                ", description='" + description + '\'' +
-                ", createDatetime=" + createDatetime +
-                ", updateDatetime=" + updateDatetime +
-                ", doneDatetime=" + doneDatetime +
-                '}';
+	return "TodoItem [id=" + id + ", isDone=" + isDone + ", description="
+		+ description + ", fullImage=" + fullImage
+		+ ", createDatetime=" + createDatetime + ", updateDatetime="
+		+ updateDatetime + ", doneDatetime=" + doneDatetime
+		+ ", thumbnailBitmap=" + thumbnailBitmap + "]";
     }
+
 }

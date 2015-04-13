@@ -24,4 +24,7 @@
     </array>
     <string name="pick_image_dialog_loading">Loading Images...</string>
     <string name="save_image_dialog_loading">Saving Images...</string>
+    
+    <string name="view_full_image_modify">Modify</string>
+    <string name="view_full_image_delete">Delete</string>
 </resources>

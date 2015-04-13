@@ -23,5 +23,6 @@
         android:id="@+id/slide_menu_list"
         android:layout_gravity="center_horizontal"
         android:footerDividersEnabled="false"
+        android:cacheColorHint="#00000000"
         android:background="@android:color/white" />
 </LinearLayout>
