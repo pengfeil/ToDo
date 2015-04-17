@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="close" />
+        android:text="close"
+        android:background="@null" />
 
     <Button
         android:id="@+id/view_full_image_modifyBtn"
@@ -17,7 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/view_full_image_modify" />
+        android:text="@string/view_full_image_modify"
+        android:background="@null" />
 
     <Button
         android:id="@+id/view_full_image_deleteBtn"
@@ -25,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/view_full_image_delete" />
+        android:text="@string/view_full_image_delete"
+        android:background="@null" />
 
     <ImageView
         android:id="@+id/view_full_image_imageView"

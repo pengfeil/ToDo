@@ -36,76 +36,94 @@ public class TodoListActivity extends TodoBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView(R.layout.activity_todo_list);
-	initializeWidgets();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_todo_list);
+        initializeWidgets();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-	super.onConfigurationChanged(newConfig);
-	listAdapter.notifyDataSetChanged();
+        super.onConfigurationChanged(newConfig);
+        listAdapter.notifyDataSetChanged();
     }
 
     protected void initializeWidgets() {
-	todoList = (ListView) this.findViewById(R.id.todo_list_list);
-	listAdapter = new TodoListAdapter(this);
-	todoList.setAdapter(listAdapter);
-	listAdapter.notifyDataSetChanged();
-	todoList.setOnItemLongClickListener(new OnItemLongClickListener() {
+        todoList = (ListView) this.findViewById(R.id.todo_list_list);
+        listAdapter = new TodoListAdapter(this, todoList);
+        todoList.setAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
+        todoList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-	    @Override
-	    public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-		    int arg2, long arg3) {
-		final int position = (int) arg3;
-		DialogUtil.confirmDialog(TodoListActivity.this, "Notice",
-			"Delete this item?", new ActionCallback() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int arg2, long arg3) {
+                final int position = (int) arg3;
+                DialogUtil.confirmDialog(TodoListActivity.this, "Notice",
+                        "Delete this item?", new ActionCallback() {
+                            @Override
+                            public void perform() {
+                                TodoItem todo = listAdapter.getItem(position);
+                                listAdapter.deleteItem(todo);
+                                ExternalFileIOHelper.deleteImage(
+                                        getApplicationContext(),
+                                        todo.getFullImage());
+                            }
+                        });
+                return false;
+            }
+        });
+        todoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (listAdapter.getActiveItemPosition() >= 0 && listAdapter.getActiveItemPosition() != position) {
+                    listAdapter.saveCurrentText();
+                    todoList.requestFocus();
+                }
+            }
+        });
+        final View mainContent = this.findViewById(R.id.todo_list_main_content_layout);
+        mainContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listAdapter.getActiveItemPosition() >= 0) {
+                    listAdapter.saveCurrentText();
+                    mainContent.requestFocus();
+                }
+            }
+        });
 
-			    @Override
-			    public void perform() {
-				TodoItem todo = listAdapter.getItem(position);
-				listAdapter.deleteItem(todo);
-				ExternalFileIOHelper.deleteImage(
-					getApplicationContext(),
-					todo.getFullImage());
-			    }
-			});
-		return false;
-	    }
-	});
+        slideMenu = (SlideMenu) this.findViewById(R.id.todo_list_slide_menu);
+        slideMenu.setMenuSelectedAction(new MenuSelectedAction() {
 
-	slideMenu = (SlideMenu) this.findViewById(R.id.todo_list_slide_menu);
-	slideMenu.setMenuSelectedAction(new MenuSelectedAction() {
+            @Override
+            public void perform(int index) {
+                if (index == 0) {
+                    listAdapter.setIsShowingArchived(false);
+                } else if (index == 1) {
+                    listAdapter.setIsShowingArchived(true);
+                }
+            }
+        });
 
-	    @Override
-	    public void perform(int index) {
-		if (index == 0) {
-		    listAdapter.setIsShowingArchived(false);
-		} else if (index == 1) {
-		    listAdapter.setIsShowingArchived(true);
-		}
-	    }
-	});
-
-	topbar = (TopBar) this.findViewById(R.id.todo_list_top_bar);
-	topbar.setTitleText(R.string.activity_title_todo_list_1);
-	topbar.setButtonsDisplay(true, false,
-		getResources().getText(R.string.activity_menu_left_1), null);
-	topbar.setLeftButtonOnClickListener(new View.OnClickListener() {
-	    @Override
-	    public void onClick(View v) {
-		// Show the slide menu
-		slideMenu.forceSlideOut();
-	    }
-	});
+        topbar = (TopBar) this.findViewById(R.id.todo_list_top_bar);
+        topbar.setTitleText(R.string.activity_title_todo_list_1);
+        topbar.setButtonsDisplay(true, false,
+                getResources().getText(R.string.activity_menu_left_1), null);
+        topbar.setLeftButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the slide menu
+                slideMenu.forceSlideOut();
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
-	super.onDestroy();
-	if (uiTask != null) {
-	    uiTask.stop();
-	}
+        super.onDestroy();
+        if (uiTask != null) {
+            uiTask.stop();
+        }
     }
 
     private BackgroundUITask uiTask;
@@ -113,67 +131,67 @@ public class TodoListActivity extends TodoBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	Log.d("Todo", this.getClass() + "onActivityResult " + resultCode);
-	if (requestCode == ActionHelper.REQUEST_IMAGE_PICKER
-		&& resultCode == RESULT_OK) {
-	    addOrUpdateImage(data);
-	} else if (requestCode == ActionHelper.REQUEST_VIEW_IMAGE) {
-	    if (resultCode == ActionHelper.RESULT_DELETE_IMAGE) {
-		deleteImage();
-	    } else if (resultCode == ActionHelper.RESULT_MODIFY_IMAGE) {
-		addOrUpdateImage(data);
-	    }
-	}
+        Log.d("Todo", this.getClass() + "onActivityResult " + resultCode);
+        if (requestCode == ActionHelper.REQUEST_IMAGE_PICKER
+                && resultCode == RESULT_OK) {
+            addOrUpdateImage(data);
+        } else if (requestCode == ActionHelper.REQUEST_VIEW_IMAGE) {
+            if (resultCode == ActionHelper.RESULT_DELETE_IMAGE) {
+                deleteImage();
+            } else if (resultCode == ActionHelper.RESULT_MODIFY_IMAGE) {
+                addOrUpdateImage(data);
+            }
+        }
     }
 
     private void deleteImage() {
-	uiTask = new BackgroundUITask(this, true);
-	uiTask.setOkCallback(new TaskCallback() {
-	    @Override
-	    public void perform() {
-		tempItem.setThumbnail(null);
-		tempItem.setFullImage(null);
-		listAdapter.updateItem(tempItem);
-	    }
-	});
-	uiTask.start(new Task() {
-	    @Override
-	    public boolean perform() {
-		tempItem = listAdapter.getItem(listAdapter
-			.getActiveItemPosition());
-		return ExternalFileIOHelper.deleteImage(
-			getApplicationContext(), tempItem.getFullImage());
-	    }
-	});
+        uiTask = new BackgroundUITask(this, true);
+        uiTask.setOkCallback(new TaskCallback() {
+            @Override
+            public void perform() {
+                tempItem.setThumbnail(null);
+                tempItem.setFullImage(null);
+                listAdapter.updateItem(tempItem);
+            }
+        });
+        uiTask.start(new Task() {
+            @Override
+            public boolean perform() {
+                tempItem = listAdapter.getItem(listAdapter
+                        .getActiveItemPosition());
+                return ExternalFileIOHelper.deleteImage(
+                        getApplicationContext(), tempItem.getFullImage());
+            }
+        });
     }
 
     private void addOrUpdateImage(Intent data) {
-	final String imagePath = data
-		.getStringExtra(ImagePickerActivity.DATA_KEY);
+        final String imagePath = data
+                .getStringExtra(ImagePickerActivity.DATA_KEY);
 
-	uiTask = new BackgroundUITask(this, true);
-	uiTask.setOkCallback(new TaskCallback() {
-	    @Override
-	    public void perform() {
-		listAdapter.updateItem(tempItem);
-	    }
-	});
-	uiTask.start(new Task() {
-	    @Override
-	    public boolean perform() {
-		Bitmap thumbnail = NativeImageLoader.getInstance()
-			.decodeThumbBitmapForFile(imagePath,
-				ImageUtil.THUMBNAIL_SIZE,
-				ImageUtil.THUMBNAIL_SIZE);
-		tempItem = listAdapter.getItem(listAdapter
-			.getActiveItemPosition());
-		tempItem.setThumbnail(ImageUtil.Bitmap2Bytes(thumbnail));
-		// Save big image
-		String internalImagePath = ExternalFileIOHelper.writeImage(
-			TodoListActivity.this, imagePath);
-		tempItem.setFullImage(internalImagePath);
-		return true;
-	    }
-	});
+        uiTask = new BackgroundUITask(this, true);
+        uiTask.setOkCallback(new TaskCallback() {
+            @Override
+            public void perform() {
+                listAdapter.updateItem(tempItem);
+            }
+        });
+        uiTask.start(new Task() {
+            @Override
+            public boolean perform() {
+                Bitmap thumbnail = NativeImageLoader.getInstance()
+                        .decodeThumbBitmapForFile(imagePath,
+                                ImageUtil.THUMBNAIL_SIZE,
+                                ImageUtil.THUMBNAIL_SIZE);
+                tempItem = listAdapter.getItem(listAdapter
+                        .getActiveItemPosition());
+                tempItem.setThumbnail(ImageUtil.Bitmap2Bytes(thumbnail));
+                // Save big image
+                String internalImagePath = ExternalFileIOHelper.writeImage(
+                        TodoListActivity.this, imagePath);
+                tempItem.setFullImage(internalImagePath);
+                return true;
+            }
+        });
     }
 }

@@ -5,6 +5,7 @@
     tools:context=".TodoListActivity">
 
     <RelativeLayout
+        android:id="@+id/todo_list_main_content_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#ffffff" >

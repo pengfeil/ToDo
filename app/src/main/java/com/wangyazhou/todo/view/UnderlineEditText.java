@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.EditText;
@@ -12,22 +13,22 @@ import android.widget.EditText;
 @SuppressLint("ClickableViewAccessibility")
 public class UnderlineEditText extends EditText {
     private Paint mPaint;
-    private boolean hasUnderLine = false;
+    private boolean hasUnderLine = true;
 
     public UnderlineEditText(Context context, AttributeSet attrs) {
-	super(context, attrs);
-	mPaint = new Paint();
+        super(context, attrs);
 
-	mPaint.setStyle(Paint.Style.STROKE);
-	mPaint.setColor(Color.BLACK);
+        mPaint = new Paint();
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setColor(Color.BLACK);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-	super.onDraw(canvas);
-	if (hasUnderLine)
-	    canvas.drawLine(0, this.getHeight() - 1, this.getWidth() - 1,
-		    this.getHeight() - 1, mPaint);
+        super.onDraw(canvas);
+        if (hasUnderLine)
+            canvas.drawLine(0, this.getHeight() - 1, this.getWidth() - 1,
+                    this.getHeight() - 1, mPaint);
     }
 
     public boolean isHasUnderLine() {
@@ -38,15 +39,18 @@ public class UnderlineEditText extends EditText {
         this.hasUnderLine = hasUnderLine;
         this.invalidate();
     }
-    
+
     public int selection = -1;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-	boolean returnVal = super.onTouchEvent(event);
-	selection = this.getSelectionStart();
-	return returnVal;
+        boolean returnVal = super.onTouchEvent(event);
+        selection = this.getSelectionStart();
+        return returnVal;
     }
 
-    
+    @Override
+    protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
+        super.onFocusChanged(focused, direction, previouslyFocusedRect);
+    }
 }

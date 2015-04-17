@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ToDo</string>
 
-    <string name="activity_title_todo_list_1">ToDo List</string>
+    <string name="activity_title_todo_list_1">ToDo</string>
     <string name="activity_title_todo_list_2">ToDo Archives</string>
 
     <string name="activity_menu_left_1">Menu</string>
@@ -27,4 +27,6 @@
     
     <string name="view_full_image_modify">Modify</string>
     <string name="view_full_image_delete">Delete</string>
+
+    <string name="input_text_hint">Tap here to add</string>
 </resources>

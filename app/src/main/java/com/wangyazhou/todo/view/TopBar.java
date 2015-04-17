@@ -2,8 +2,10 @@ package com.wangyazhou.todo.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,7 +26,11 @@ public class TopBar extends LinearLayout{
 
     protected void init(){
         View view = inflater.inflate(LAYOUT_ID, null);
-        this.addView(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        WindowManager manager = (WindowManager) this.getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(dm);
+        this.addView(view, LayoutParams.MATCH_PARENT, dm.heightPixels / 8);
         leftButton = (Button) this.findViewById(R.id.top_bar_leftBtn);
         rightButton = (Button) this.findViewById(R.id.top_bar_rightBtn);
         titleTextView = (TextView) this.findViewById(R.id.top_bar_title);

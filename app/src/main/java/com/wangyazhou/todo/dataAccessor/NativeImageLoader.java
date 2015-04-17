@@ -19,118 +19,117 @@ public class NativeImageLoader {
     private ExecutorService mImageThreadPool = Executors.newFixedThreadPool(1);
 
     private NativeImageLoader() {
-	final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
-	final int cacheSize = maxMemory / 4;
-	mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+        final int cacheSize = maxMemory / 4;
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
 
-	    @Override
-	    protected int sizeOf(String key, Bitmap bitmap) {
-		return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
-	    }
-	};
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
+            }
+        };
     }
 
     public static NativeImageLoader getInstance() {
-	return mInstance;
+        return mInstance;
     }
 
     public Bitmap loadNativeImage(final String path,
-	    final NativeImageCallBack mCallBack) {
-	return this.loadNativeImage(path, null, mCallBack);
+                                  final NativeImageCallBack mCallBack) {
+        return this.loadNativeImage(path, null, mCallBack);
     }
 
     public Bitmap loadNativeImage(final String path, final Point mPoint,
-	    final NativeImageCallBack mCallBack) {
-	if (path == null) {
-	    Log.d("Todo", "loadNativeImage path is null");
-	    return null;
-	}
-	Bitmap bitmap = getBitmapFromMemCache(generateKey(path, mPoint));
+                                  final NativeImageCallBack mCallBack) {
+        if (path == null) {
+            Log.d("Todo", "loadNativeImage path is null");
+            return null;
+        }
+        Bitmap bitmap = getBitmapFromMemCache(generateKey(path, mPoint));
 
-	final Handler mHander = new Handler() {
+        final Handler mHander = new Handler() {
 
-	    @Override
-	    public void handleMessage(Message msg) {
-		super.handleMessage(msg);
-		mCallBack.onImageLoader((Bitmap) msg.obj, path);
-	    }
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                mCallBack.onImageLoader((Bitmap) msg.obj, path);
+            }
 
-	};
+        };
 
-	if (bitmap == null) {
-	    mImageThreadPool.execute(new Runnable() {
+        if (bitmap == null) {
+            mImageThreadPool.execute(new Runnable() {
 
-		@Override
-		public void run() {
-		    Bitmap mBitmap = decodeThumbBitmapForFile(path,
-			    mPoint == null ? 0 : mPoint.x, mPoint == null ? 0
-				    : mPoint.y);
-		    Log.d("Todo", "loadNativeImage image is null with path "
-			    + path);
-		    Message msg = mHander.obtainMessage();
-		    msg.obj = mBitmap;
-		    mHander.sendMessage(msg);
+                @Override
+                public void run() {
+                    Bitmap mBitmap = decodeThumbBitmapForFile(path,
+                            mPoint == null ? 0 : mPoint.x, mPoint == null ? 0
+                                    : mPoint.y);
+                    Log.d("Todo", "Loading image with size: w" + mPoint.x + ", h" + mPoint.y);
+                    Message msg = mHander.obtainMessage();
+                    msg.obj = mBitmap;
+                    mHander.sendMessage(msg);
 
-		    addBitmapToMemoryCache(generateKey(path, mPoint), mBitmap);
-		}
-	    });
-	}
-	return bitmap;
+                    addBitmapToMemoryCache(generateKey(path, mPoint), mBitmap);
+                }
+            });
+        }
+        return bitmap;
 
     }
 
     private String generateKey(String path, Point mPoint) {
-	if (mPoint == null) {
-	    return path;
-	} else {
-	    return path + mPoint.x + mPoint.y;
-	}
+        if (mPoint == null) {
+            return path;
+        } else {
+            return path + mPoint.x + mPoint.y;
+        }
     }
 
     private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-	if (getBitmapFromMemCache(key) == null && bitmap != null) {
-	    mMemoryCache.put(key, bitmap);
-	}
+        if (getBitmapFromMemCache(key) == null && bitmap != null) {
+            mMemoryCache.put(key, bitmap);
+        }
     }
 
     private Bitmap getBitmapFromMemCache(String key) {
-	return mMemoryCache.get(key);
+        return mMemoryCache.get(key);
     }
 
     public Bitmap decodeThumbBitmapForFile(String path, int viewWidth,
-	    int viewHeight) {
-	BitmapFactory.Options options = new BitmapFactory.Options();
-	options.inJustDecodeBounds = true;
-	BitmapFactory.decodeFile(path, options);
-	options.inSampleSize = computeScale(options, viewWidth, viewHeight);
+                                           int viewHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        options.inSampleSize = computeScale(options, viewWidth, viewHeight);
 
-	options.inJustDecodeBounds = false;
+        options.inJustDecodeBounds = false;
 
-	return BitmapFactory.decodeFile(path, options);
+        return BitmapFactory.decodeFile(path, options);
     }
 
     private int computeScale(BitmapFactory.Options options, int viewWidth,
-	    int viewHeight) {
-	int inSampleSize = 1;
-	if (viewWidth == 0 || viewWidth == 0) {
-	    return inSampleSize;
-	}
-	int bitmapWidth = options.outWidth;
-	int bitmapHeight = options.outHeight;
+                             int viewHeight) {
+        int inSampleSize = 1;
+        if (viewWidth == 0 || viewWidth == 0) {
+            return inSampleSize;
+        }
+        int bitmapWidth = options.outWidth;
+        int bitmapHeight = options.outHeight;
 
-	if (bitmapWidth > viewWidth || bitmapHeight > viewWidth) {
-	    int widthScale = Math
-		    .round((float) bitmapWidth / (float) viewWidth);
-	    int heightScale = Math.round((float) bitmapHeight
-		    / (float) viewWidth);
+        if (bitmapWidth > viewWidth || bitmapHeight > viewWidth) {
+            int widthScale = Math
+                    .round((float) bitmapWidth / (float) viewWidth);
+            int heightScale = Math.round((float) bitmapHeight
+                    / (float) viewWidth);
 
-	    inSampleSize = widthScale < heightScale ? widthScale : heightScale;
-	}
-	return inSampleSize;
+            inSampleSize = widthScale < heightScale ? widthScale : heightScale;
+        }
+        return inSampleSize;
     }
 
     public interface NativeImageCallBack {
-	public void onImageLoader(Bitmap bitmap, String path);
+        public void onImageLoader(Bitmap bitmap, String path);
     }
 }

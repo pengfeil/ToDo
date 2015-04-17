@@ -1,42 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal">
 
-    <CheckBox
+    <ImageView
+        android:id="@+id/todo_list_item_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/todo_list_item_checkBox"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:src="@drawable/checkboxselected" />
 
-    <com.wangyazhou.todo.view.UnderlineEditText
+    <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="10"
-        android:id="@+id/todo_list_item_editText"
-        android:layout_gravity="center_vertical"
-        android:inputType="textMultiLine"
-        android:background="@null"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:enabled="true"
-        android:textCursorDrawable="@android:color/holo_blue_dark"
-        android:focusable="true" />
+        android:layout_weight="10"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/todo_list_item_text"
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textIsSelectable="false"
+            android:textSize="20dp"
+            android:gravity="center_vertical"
+            android:clickable="true" />
+
+        <com.wangyazhou.todo.view.UnderlineEditText
+            android:id="@+id/todo_list_item_editText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:enabled="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:textColor="@android:color/black"
+            android:hint="@string/input_text_hint"
+            android:inputType="textMultiLine"
+            android:textCursorDrawable="@null" />
+    </FrameLayout>
 
     <ImageView
+        android:id="@+id/todo_list_item_imageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:id="@+id/todo_list_item_imageView"
-        android:src="@mipmap/ic_launcher"
-        android:contentDescription="@string/image_view_content_desc"
         android:layout_gravity="center_vertical|end"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
         android:adjustViewBounds="false"
         android:clickable="true"
+        android:contentDescription="@string/image_view_content_desc"
         android:drawingCacheQuality="high"
         android:scaleType="fitXY"
-        android:layout_weight="1"
-        android:layout_margin="3dp" />
+        android:src="@mipmap/ic_launcher" />
 </LinearLayout>
