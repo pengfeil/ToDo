@@ -10,11 +10,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
+        android:layout_marginLeft="5dp"
         android:src="@drawable/checkboxselected" />
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:minHeight="60dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
@@ -29,7 +30,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textIsSelectable="false"
-            android:textSize="20dp"
+            android:textSize="16sp"
             android:gravity="center_vertical"
             android:clickable="true" />
 
@@ -39,9 +40,10 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center_vertical"
             android:background="@null"
+            android:visibility="gone"
+            android:textSize="16sp"
             android:enabled="true"
             android:focusable="true"
-            android:visibility="gone"
             android:textColor="@android:color/black"
             android:hint="@string/input_text_hint"
             android:inputType="textMultiLine"
@@ -59,6 +61,6 @@
         android:clickable="true"
         android:contentDescription="@string/image_view_content_desc"
         android:drawingCacheQuality="high"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher" />
 </LinearLayout>

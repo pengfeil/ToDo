@@ -19,11 +19,13 @@
         android:layout_gravity="center">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/image_grid_item_picker"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="top|right"
-            android:src="@android:drawable/btn_star_big_off"
-            android:layout_margin="10dp" />
+            android:layout_margin="10dp"
+            android:scaleType="fitXY"
+            android:src="@android:drawable/btn_star_big_off" />
+
     </LinearLayout>
 </FrameLayout>

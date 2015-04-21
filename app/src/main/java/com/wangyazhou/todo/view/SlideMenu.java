@@ -38,7 +38,7 @@ public class SlideMenu extends LinearLayout {
 
     protected TransparentFrameOnTouchCallback transparentFrameOnTouchCallback;
 
-    protected final static int MENU_WIDTH = 500;
+    protected static int MENU_WIDTH = 600;
     protected final static int FORCE_SLIDE_DURATION = 500;
     protected final static int MIN_SNAP_VELOCITY = 1;
 

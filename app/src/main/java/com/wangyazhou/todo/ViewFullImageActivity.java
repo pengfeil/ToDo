@@ -80,6 +80,8 @@ public class ViewFullImageActivity extends TodoBaseActivity {
                 if (modifiedImageData != null) {
                     setResult(ActionHelper.RESULT_MODIFY_IMAGE,
                             modifiedImageData);
+                } else {
+                    setResult(-100, null); //no result
                 }
                 finish();
             }

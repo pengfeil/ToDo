@@ -8,7 +8,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,7 +19,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.wangyazhou.todo.adapter.ImageGridAdapter;
-import com.wangyazhou.todo.dataAccessor.ExternalFileIOHelper;
 import com.wangyazhou.todo.dataAccessor.Image;
 import com.wangyazhou.todo.util.BackgroundUITask;
 import com.wangyazhou.todo.util.BackgroundUITask.Task;

@@ -11,6 +11,7 @@
         android:id="@+id/slide_menu_item_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
         android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher" />
 
@@ -23,7 +24,7 @@
         android:gravity="center|left"
         android:text="see todo list"
         android:textColor="#000"
-        android:textSize="20dp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/slide_menu_item_number"

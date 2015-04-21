@@ -15,6 +15,7 @@ import com.wangyazhou.todo.R;
 public class TopBar extends LinearLayout{
     protected LayoutInflater inflater;
     protected static final int LAYOUT_ID = R.layout.top_bar;
+    protected static final int BAR_HEIGHT_PX = 80;
 
     protected Button leftButton, rightButton;
     protected TextView titleTextView;
@@ -30,7 +31,7 @@ public class TopBar extends LinearLayout{
                 .getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(dm);
-        this.addView(view, LayoutParams.MATCH_PARENT, dm.heightPixels / 8);
+        this.addView(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         leftButton = (Button) this.findViewById(R.id.top_bar_leftBtn);
         rightButton = (Button) this.findViewById(R.id.top_bar_rightBtn);
         titleTextView = (TextView) this.findViewById(R.id.top_bar_title);

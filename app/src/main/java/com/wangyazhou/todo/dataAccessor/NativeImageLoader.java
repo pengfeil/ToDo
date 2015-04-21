@@ -74,6 +74,8 @@ public class NativeImageLoader {
                     addBitmapToMemoryCache(generateKey(path, mPoint), mBitmap);
                 }
             });
+        } else {
+            mCallBack.onImageLoader(bitmap, path);
         }
         return bitmap;
 
