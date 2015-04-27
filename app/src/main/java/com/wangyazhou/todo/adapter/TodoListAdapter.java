@@ -32,7 +32,6 @@ import com.wangyazhou.todo.util.BackgroundUITask;
 import com.wangyazhou.todo.util.BackgroundUITask.Task;
 import com.wangyazhou.todo.util.BackgroundUITask.TaskCallback;
 import com.wangyazhou.todo.util.DialogUtil;
-import com.wangyazhou.todo.view.UnderlineEditText;
 
 public class TodoListAdapter extends SimpleAdapter {
     protected static int itemLayoutId = R.layout.to_do_list_item;
@@ -48,9 +47,18 @@ public class TodoListAdapter extends SimpleAdapter {
 
     public final class ViewHolder {
 	ImageView checkbox;
-	TextView text;
-	UnderlineEditText editText;
+	TextView text, underline;
+	EditText editText;
 	ImageView image;
+	
+	public void displayEditText(){
+	    editText.setVisibility(View.VISIBLE);
+	    underline.setVisibility(View.VISIBLE);
+	}
+	public void hideEditText(){
+	    editText.setVisibility(View.INVISIBLE);
+	    underline.setVisibility(View.INVISIBLE);
+	}
     }
 
     private Activity context;
@@ -80,6 +88,7 @@ public class TodoListAdapter extends SimpleAdapter {
 	isRenderingView = true;
 	holder.text.setTag(position);
 	holder.editText.setTag(position);
+	holder.editText.setSingleLine();
 	holder.checkbox.setTag(position);
 	holder.image.setTag(position);
 	// Set data to display
@@ -100,8 +109,10 @@ public class TodoListAdapter extends SimpleAdapter {
 	holder = new ViewHolder();
 	holder.text = (TextView) convertView
 		.findViewById(R.id.todo_list_item_text);
-	holder.editText = (UnderlineEditText) convertView
+	holder.editText = (EditText) convertView
 		.findViewById(R.id.todo_list_item_editText);
+	holder.underline = (TextView) convertView
+		.findViewById(R.id.todo_list_item_editText_underline);
 	holder.checkbox = (ImageView) convertView
 		.findViewById(R.id.todo_list_item_checkBox);
 	holder.image = (ImageView) convertView
@@ -121,7 +132,7 @@ public class TodoListAdapter extends SimpleAdapter {
 		    Log.d("Todo", "add edit state to " + position);
 		    activeItemPosition = position;
 		    ViewHolder activeHolder = getViewHolderByPosition(activeItemPosition);
-		    activeHolder.editText.setVisibility(View.VISIBLE);
+		    activeHolder.displayEditText();
 		    activeHolder.text.setVisibility(View.INVISIBLE);
 		    delayToRequestFocus();
 		}
@@ -143,16 +154,16 @@ public class TodoListAdapter extends SimpleAdapter {
 		return true;
 	    }
 	});
-
+	
 	if (activeItemPosition == position) {
 	    Log.d("Todo", "request focus for editText " + activeItemPosition);
-	    holder.editText.setVisibility(View.VISIBLE);
+	    holder.displayEditText();
 	    holder.text.setVisibility(View.INVISIBLE);
 	    delayToRequestFocus();
 	} else {
 	    holder.editText.clearFocus();
 	    holder.text.setVisibility(View.VISIBLE);
-	    holder.editText.setVisibility(View.INVISIBLE);
+	    holder.hideEditText();
 	}
     }
 
@@ -209,7 +220,7 @@ public class TodoListAdapter extends SimpleAdapter {
 	if (activeItemPosition >= 0) {
 	    Log.d("Todo", "clear edit state of " + activeItemPosition);
 	    ViewHolder activeHolder = getViewHolderByPosition(activeItemPosition);
-	    activeHolder.editText.setVisibility(View.INVISIBLE);
+	    activeHolder.hideEditText();
 	    activeHolder.text.setVisibility(View.VISIBLE);
 	    activeItemPosition = -1;
 	}
@@ -327,6 +338,8 @@ public class TodoListAdapter extends SimpleAdapter {
     public void realNotifyDataSetChanged() {
 	super.notifyDataSetChanged();
     }
+    
+    private TodoItem[] tempItems;
 
     @Override
     public void notifyDataSetChanged() {
@@ -335,17 +348,9 @@ public class TodoListAdapter extends SimpleAdapter {
 	    @Override
 	    public void perform() {
 		clearEditFlags();
-		realNotifyDataSetChanged();
-	    }
-	});
-	uiTask.start(new Task() {
-	    @Override
-	    public boolean perform() {
-		TodoItem[] items = todoItemAccessor.listTodoItem(-1,
-			Integer.MAX_VALUE, isShowingArchived);
 		data.clear();
 		boolean isInputLineAdded = false;
-		for (TodoItem item : items) {
+		for (TodoItem item : tempItems) {
 		    if (!isInputLineAdded
 			    && item.getIsDone() == TodoItem.VALUE_IS_DONE) {
 			// Add an empty item to represent the input line.
@@ -360,6 +365,14 @@ public class TodoListAdapter extends SimpleAdapter {
 		    // Add an empty item to empty list.
 		    insertInputItem();
 		}
+		realNotifyDataSetChanged();
+	    }
+	});
+	uiTask.start(new Task() {
+	    @Override
+	    public boolean perform() {
+		tempItems = todoItemAccessor.listTodoItem(-1,
+			Integer.MAX_VALUE, isShowingArchived);
 		return true;
 	    }
 	});

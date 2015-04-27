@@ -16,17 +16,20 @@ import android.util.LruCache;
 public class NativeImageLoader {
     private LruCache<String, Bitmap> mMemoryCache;
     private static NativeImageLoader mInstance = new NativeImageLoader();
-    private ExecutorService mImageThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService mImageThreadPool = Executors.newFixedThreadPool(4);
 
     private NativeImageLoader() {
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
-        final int cacheSize = maxMemory / 4;
+        final int cacheSize = maxMemory / 2;
+        Log.d("Todo", "cacheSize:" + cacheSize + "KB");
         mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
 
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
+                int imageSize = bitmap.getRowBytes() * bitmap.getHeight() / 1024;
+                Log.d("Todo", "Image Size:" + imageSize + "KB");
+                return imageSize;
             }
         };
     }
@@ -74,8 +77,6 @@ public class NativeImageLoader {
                     addBitmapToMemoryCache(generateKey(path, mPoint), mBitmap);
                 }
             });
-        } else {
-            mCallBack.onImageLoader(bitmap, path);
         }
         return bitmap;
 
@@ -105,6 +106,8 @@ public class NativeImageLoader {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
         options.inSampleSize = computeScale(options, viewWidth, viewHeight);
+        
+        Log.d("Todo", "SampleSize: " + options.inSampleSize);
 
         options.inJustDecodeBounds = false;
 
@@ -114,7 +117,7 @@ public class NativeImageLoader {
     private int computeScale(BitmapFactory.Options options, int viewWidth,
                              int viewHeight) {
         int inSampleSize = 1;
-        if (viewWidth == 0 || viewWidth == 0) {
+        if (viewWidth == 0 || viewHeight == 0) {
             return inSampleSize;
         }
         int bitmapWidth = options.outWidth;

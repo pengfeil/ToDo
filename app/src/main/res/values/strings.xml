@@ -1,32 +1,32 @@
 <resources>
     <string name="app_name">ToDo</string>
 
-    <string name="activity_title_todo_list_1">ToDo</string>
-    <string name="activity_title_todo_list_2">ToDo Archives</string>
+    <string name="activity_title_todo_list_1">待办</string>
+    <string name="activity_title_todo_list_2">已完成</string>
 
-    <string name="activity_menu_left_1">Menu</string>
-
-    <string name="activity_menu_left_2">Cancel</string>
-    <string name="activity_menu_left_3">OK</string>
+    <string name="activity_menu_left_2">取消</string>
+    <string name="activity_menu_left_3">确定</string>
 
     <array name="top_bar_menu">
-        <item>Undos</item>
-        <item>Archives</item>
+        <item>待办</item>
+        <item>已完成</item>
     </array>
 
     <string name="image_view_content_desc">To do image</string>
-    <string name="new_task_hint">Tap here to add</string>
+    <string name="new_task_hint">点击这里添加内容</string>
 
-    <string name="pick_image_dialog_title">Pick Image</string>
+    <string name="pick_image_dialog_title">选择图片</string>
     <array name="pick_image_dialog_menu">
         <item>From Camera</item>
         <item>From Picture Library</item>
     </array>
-    <string name="pick_image_dialog_loading">Loading</string>
-    <string name="save_image_dialog_loading">Saving</string>
+    <string name="pick_image_dialog_loading">加载中</string>
+    <string name="save_image_dialog_loading">保存中</string>
     
-    <string name="view_full_image_modify">Modify</string>
-    <string name="view_full_image_delete">Delete</string>
+    <string name="view_full_image_modify">修改</string>
+    <string name="view_full_image_delete">删除</string>
+    <string name="view_full_image_close">返回</string>
+    <string name="view_full_image_confirm">确定</string>
 
-    <string name="input_text_hint">Tap here to add</string>
+    <string name="input_text_hint">点击这里添加内容</string>
 </resources>

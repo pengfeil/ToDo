@@ -1,5 +1,3 @@
 <resources>
-
-
-
+    <color name="selectedMenuBackground">#EFEFEF</color>
 </resources>

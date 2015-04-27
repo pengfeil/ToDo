@@ -17,6 +17,7 @@ public class MenuListAdapter extends SimpleAdapter {
     protected boolean[] isSelected;
 
     protected int[] numbers;
+    protected int selectedIndex;
     protected TodoItemAccessor dataAccessor;
     protected Context context;
 
@@ -40,7 +41,12 @@ public class MenuListAdapter extends SimpleAdapter {
             isSelected[i] = false;
         }
         isSelected[position] = true;
+        selectedIndex = position;
         notifyDataSetChanged();
+    }
+    
+    public int getSelectedPosition(){
+	return selectedIndex;
     }
 
     public void reloadNumbers() {
@@ -65,7 +71,7 @@ public class MenuListAdapter extends SimpleAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         View view = super.getView(position, convertView, parent);
-        int colorRes = isSelected[position] ? android.R.color.darker_gray
+        int colorRes = isSelected[position] ? R.color.selectedMenuBackground
                 : android.R.color.white;
         view.setBackgroundColor(view.getResources().getColor(colorRes));
         String numberText = numbers[position] > 0 ? "" + numbers[position] : "";

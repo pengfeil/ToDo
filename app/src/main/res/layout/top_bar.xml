@@ -2,25 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/barbg"
+    android:background="#3ABB62"
     android:baselineAligned="false"
     android:gravity="center"
     android:orientation="horizontal" >
 
     <LinearLayout
+        android:id="@+id/top_bar_leftBtnZone"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="1"
         android:gravity="center|left"
         android:orientation="horizontal" >
-
         <Button
             android:id="@+id/top_bar_leftBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:text="Menu" />
+            android:layout_width="21dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="10dp" />
 
     </LinearLayout>
 
@@ -39,6 +38,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:text="Todo"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
     </LinearLayout>
 
     <LinearLayout

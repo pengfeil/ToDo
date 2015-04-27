@@ -23,8 +23,7 @@ public class ExternalFileIOHelper {
 	String targetName = generateFileName(sourceImagePath);
 	String targetPath = context.getFilesDir() + File.separator + targetName;
 	try {
-	    FileOutputStream out = new FileOutputStream(targetPath);// context.openFileOutput(targetName,
-								    // 0);
+	    FileOutputStream out = new FileOutputStream(targetPath);
 	    FileInputStream in = new FileInputStream(sourceImagePath);
 	    byte[] buffer = new byte[1024 * 8];
 	    int readLength = -1;

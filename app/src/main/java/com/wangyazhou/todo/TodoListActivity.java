@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -102,17 +103,19 @@ public class TodoListActivity extends TodoBaseActivity {
 	    public void perform(int index) {
 		if (index == 0) {
 		    listAdapter.setIsShowingArchived(false);
+		    topbar.setTitleText(R.string.activity_title_todo_list_1);
 		} else if (index == 1) {
 		    listAdapter.setIsShowingArchived(true);
+		    topbar.setTitleText(R.string.activity_title_todo_list_2);
 		}
 	    }
 	});
 
 	topbar = (TopBar) this.findViewById(R.id.todo_list_top_bar);
 	topbar.setTitleText(R.string.activity_title_todo_list_1);
-	topbar.setButtonsDisplay(true, false,
-		getResources().getText(R.string.activity_menu_left_1), null);
-	topbar.setLeftButtonOnClickListener(new View.OnClickListener() {
+	topbar.setButtonsDisplay(true, false, null, null);
+	topbar.setLeftButtonBackground(R.drawable.menu);
+	topbar.setLeftButtonZoneOnClickListener(new View.OnClickListener() {
 	    @Override
 	    public void onClick(View v) {
 		listAdapter.clearEditFlags();
@@ -216,4 +219,14 @@ public class TodoListActivity extends TodoBaseActivity {
 	    }
 	});
     }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+	if(event.getKeyCode() == KeyEvent.KEYCODE_ENTER){
+	    listAdapter.saveCurrentText();
+	}
+	return super.dispatchKeyEvent(event);
+    }
+    
+    
 }

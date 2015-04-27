@@ -4,13 +4,13 @@
     android:layout_height="match_parent">
 
     <com.wangyazhou.todo.view.TodoImageView
+        android:id="@+id/image_grid_item_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/image_grid_item_image"
         android:layout_gravity="center"
-        android:src="@android:mipmap/sym_def_app_icon"
+        android:contentDescription="grid_image"
         android:scaleType="center"
-        android:contentDescription="grid_image" />
+        android:src="@android:mipmap/sym_def_app_icon" />
 
     <LinearLayout
         android:orientation="vertical"

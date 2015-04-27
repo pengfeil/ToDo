@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="close"
+        android:text="@string/view_full_image_close"
         android:background="@null" />
 
     <Button

@@ -54,7 +54,7 @@ public class ViewFullImageActivity extends TodoBaseActivity {
                 .getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(dm);
-        NativeImageLoader.getInstance().loadNativeImage(path,
+        Bitmap bitmap = NativeImageLoader.getInstance().loadNativeImage(path,
                 new Point(dm.widthPixels, dm.heightPixels),
                 new NativeImageCallBack() {
                     @Override
@@ -64,6 +64,9 @@ public class ViewFullImageActivity extends TodoBaseActivity {
                         }
                     }
                 });
+        if(bitmap != null ){
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     private Intent modifiedImageData;
@@ -121,6 +124,7 @@ public class ViewFullImageActivity extends TodoBaseActivity {
                 public void perform() {
                     imageView.setImageBitmap(newThumbnail);
                     loadFullImage(imagePath);
+                    closeBtn.setText(R.string.view_full_image_confirm);
                 }
             });
             uiTask.start(new Task() {

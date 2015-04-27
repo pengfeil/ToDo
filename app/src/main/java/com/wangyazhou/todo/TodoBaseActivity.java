@@ -30,7 +30,7 @@ public class TodoBaseActivity extends Activity {
 			    e.printStackTrace();
 			}
 			arg1.printStackTrace();
-			TodoBaseActivity.this.finish();
+			Runtime.getRuntime().exit(0);
 		    }
 		});
     }
